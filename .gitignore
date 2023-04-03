@@ -1,0 +1,9 @@
+**/target/
+.bloop/
+.bsp/
+.idea/
+.metals/
+.vscode/
+data/
+project/
+src/main/scala/credentials.scala
