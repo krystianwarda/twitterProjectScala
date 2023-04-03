@@ -70,33 +70,26 @@ object tweetsHourlyClean {
       .filter(col("date") < col("endTime"))
 
     // // Get first 5 days with the most number of tweets
-    // // Aggregate the number of records by date and sort in descending order
-    // var df_temp = df.select("date").withColumn("date",date_format(col("date"), "yyyy-MM-dd"))
-    //   .groupBy("date").agg(expr("count(date)").alias("number_of_records"))
-    //   .groupBy("date")
-    //   .agg(col("date").alias("date_new"), sum("number_of_records").alias("number_of_records"))
-    //   .drop("date").orderBy(desc("number_of_records"))
-    // println(df_temp.show(5))
+    var df_temp = df.select("date").withColumn("date",date_format(col("date"), "yyyy-MM-dd"))
+      .groupBy("date").agg(expr("count(date)").alias("number_of_records"))
+      .groupBy("date")
+      .agg(col("date").alias("date_new"), sum("number_of_records").alias("number_of_records"))
+      .drop("date").orderBy(desc("number_of_records"))
+    println(df_temp.show(5))
 
-
-    // // Get first 5 accounts with the highest number of tweets
-    // var df_temp = df.select("user_screen_name")
-    //   .groupBy("user_screen_name").agg(expr("count(user_screen_name)").alias("number_of_records"))
-    //   .orderBy(desc("number_of_records")).limit(160)
-    // println(df_temp.show(5))
+    // Get first 5 accounts with the highest number of tweets
+    df_temp = df.select("user_screen_name")
+      .groupBy("user_screen_name").agg(expr("count(user_screen_name)").alias("number_of_records"))
+      .orderBy(desc("number_of_records")).limit(160)
+    println(df_temp.show(5))
 
     // Get first 5 common hashtags used in tweets
-    var df_temp = df.select("entities_hashtags_list")
+    df_temp = df.select("entities_hashtags_list")
       .filter(col("entities_hashtags_list") =!= "")
       .withColumn("entities_hashtags_list", explode(split(col("entities_hashtags_list"), "\\,")))
       .groupBy("entities_hashtags_list")
       .count().orderBy(desc("count")).limit(160)
-      println(df_temp.show(5))
-    
-
-
-
-
+    println(df_temp.show(5))
 
   }
 }
