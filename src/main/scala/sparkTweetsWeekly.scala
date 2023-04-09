@@ -4,19 +4,13 @@ import org.apache.log4j._
 import org.apache.spark.sql.SparkSession
 import java.util.Date
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import org.apache.spark.sql.functions._
 import java.time.{Instant, LocalDateTime, ZoneOffset}
 import java.time.format.DateTimeFormatter
-import org.apache.spark.sql.functions._
-import java.time.{Instant, LocalDateTime, ZoneOffset}
-import java.time.format.DateTimeFormatter
-import org.apache.spark.sql.functions._
 import credentials._
 
 // Define the object containing the main function
-
-object tweetsHourlyClean {
+object tweetsHourly {
   def main(args: Array[String]): Unit = {
 
     val tempDatabaseName = databaseName
@@ -69,7 +63,7 @@ object tweetsHourlyClean {
       .filter(col("date") > col("beginTime"))
       .filter(col("date") < col("endTime"))
 
-    // // Get first 5 days with the most number of tweets
+    // Get first 5 days with the most number of tweets
     var df_temp = df.select("date").withColumn("date",date_format(col("date"), "yyyy-MM-dd"))
       .groupBy("date").agg(expr("count(date)").alias("number_of_records"))
       .groupBy("date")
